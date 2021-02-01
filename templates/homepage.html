@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script src="/static/jquery/jquery-3.3.1.js"></script>
+    {% include 'head.html' %}
+
+    <title>首页</title>
+
+</head>
+<body>
+{#标题#}
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">代码之路</a>
+        </div>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="#"><span class="glyphicon glyphicon-user"></span> 注册</a></li>
+            <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> 登录</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div>
+    <div class="col-md-1">
+        <div class="panel-heading panel">
+            <a data-toggle="collapse" data-parent="#accordion" href="#item-cangku" id="headcangku"
+               class="side-nav-item item-title">
+                博客管理
+            </a>
+            <div id="item-cangku" class="panel-collapse collapse">
+                <div class="item-body">
+                    <ul class="nav nav-pills nav-stacked">
+                        <li class="item-second" id='list'><a href="{% url 'blog_list' %}">博客列表</a></li>
+                        {#                        <li class="item-second" id='add'><a href="{% url 'blog_add' %}">博客添加</a></li>#}
+                        <li class="item-second" id='add'><a href="#">博客添加</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel-heading panel">
+            <a data-toggle="collapse" data-parent="#accordion" href="#item-caiwu" id="headcaiwu"
+               class="side-nav-item item-title collapsed">
+                财务管理
+            </a>
+            <div id="item-caiwu" class="panel-collapse collapse">
+                <div class="item-body">
+                    222
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+        {#内容框#}
+        <div class="col-md-11">
+        {% block ContentArea %}
+            {#内容#}
+            <div class="panel panel-default">
+                {#面板标题#}
+                <div class="panel-heading">
+                    {#                    <a href="{% url 'blog_add' %}">#}
+                    <a href="{% url 'blog_add'  %}">
+                        <button type="button" class="btn btn-primary">添加</button>
+                    </a>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-bordered">
+                        <thead id="thead">
+                        <tr>
+                            <th style="width: 50px;">序列号</th>
+                            <th style="width: 80px;">封面</th>
+                            <th style="width: 100px;">标题</th>
+                            <th style="width: 100px;">内容</th>
+                            <th style="width: 50px;">话题</th>
+                            {#                        <th>位置</th>#}
+                            <th style="width: 50px">发布者</th>
+                            {#                        <th>赞数</th>#}
+                            {#                        <th>浏览数</th>#}
+                            {#                        <th>评论数</th>#}
+                            <th style="width: 100px;">创建时间</th>
+                            {#                        <th>是否发布</th>#}
+                            <th style="width: 150px">操作</th>
+                        </tr>
+                        </thead>
+{#                        <tbody id="tbody">#}
+                        <tbody id="bodtConten">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {#分页#}
+            {% include 'assembly/pager.html' %}
+        {% endblock ContentArea %}
+        </div>
+
+
+</div>
+</body>
+{% include 'tail.html' %}
+{#<script type="text/javascript">#}
+{#    $('#ajax_page').submit(function () {#}
+{#        $.ajax({#}
+{#            url: 'http://127.0.0.1:8000/web/blog/item/list/',#}
+{#            type: 'post',#}
+{#            cache: true,#}
+{#            data: $(this).serialize(),#}
+{#            success: function (data) {#}
+{#                console.log(data);#}
+{#                // 循环遍历数据并增加到前端页面#}
+{#                for(var i=0; i<data['ar_list'].length; i++){#}
+{#                    var comment_html = "<div id='hwy_1'>" +#}
+{#                    "<a href='/content/?pk=" + data['ar_id'][i] + "' target='_blank'>" + data['ar_list'][i] + "</a>"#}
+{#                    + "</div>";#}
+{#                $('#ajax_page').before(comment_html);#}
+{#                }#}
+{#                // 判断当前页的是否有下一页，如果没有下一页则禁止按钮点击#}
+{#                if (data['has_next'] == 'no'){#}
+{#                    $('#submit').attr('value', '没有了...');#}
+{#                    $('#submit').attr('disabled', 'disabled');#}
+{#                }#}
+{#            }#}
+{#        });#}
+{#        return false;#}
+{#    });#}
+{#</script>#}
+</html>
+
+

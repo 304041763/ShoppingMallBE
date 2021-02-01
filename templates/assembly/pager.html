@@ -1,0 +1,22 @@
+
+
+{#原版备份#}
+<div style="text-align: center;margin: 3% 0;">
+    <form id="page" action={% url 'blog_list' %}>
+        <a class="first_page" id="ajax_page">
+            <button type="button" class="layui-btn layui-btn-primary layui-btn-sm">上一页</button>
+        </a>
+{#                /页数便利出来#}
+        {% for num in blog_object.paginator.page_range %}
+            <a class="now_page">
+                <button type="button" class="layui-btn layui-btn-primary layui-btn-sm">{{ num }}</button>
+            </a>
+        {% endfor %}
+        <button id="num_pages" type="button" class="layui-btn layui-btn-primary layui-btn-sm">
+            共{{ blog_object.paginator.num_pages }}页
+        </button>
+        <a class="last_page" id="ajax_page">
+            <button type="button" class="layui-btn layui-btn-primary layui-btn-sm">下一页</button>
+        </a>
+    </form>
+</div>

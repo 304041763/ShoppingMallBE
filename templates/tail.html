@@ -1,0 +1,176 @@
+<script type="text/javascript">
+    var url = 'http://127.0.0.1:8000'
+    var blogDel = url + "/web/blog/item/del/"
+    var blogAdd = url + "/web/blog/item/add/"
+    $(function () {
+        // ajax分页
+        let now_page = 1;
+        // 动态加载第一页数据
+        page_click();
+        $('.first_page button').removeClass('layui-btn-primary').addClass('layui-btn-disabled');
+        $('.now_page button').first().removeClass('layui-btn-primary').addClass('page_this');
+        //上一页
+        $('.first_page').click(function () {
+            now_page -= 1;
+            if (now_page < 1) {
+                now_page = 1;
+                return false
+            } else {
+                $('.page_this').parent().prev().click();
+            }
+        });
+        //下一页
+        $('.last_page').click(function () {
+            let num_pages = $('.now_page button').last().text();
+            now_page += 1;
+
+            if (now_page > parseInt(num_pages)) {
+                now_page -= 1;
+                return false
+            } else {
+                $('.page_this').parent().next().click();
+            }
+        });
+        //切换页
+        $('.now_page').click(function () {
+            now_page = parseInt($(this).children('button').text());
+            $('.now_page button').removeClass('page_this').addClass('layui-btn-primary');
+            $(this).addClass('page_this');
+            $(this).children('button').removeClass('layui-btn-primary').addClass('page_this');
+            page_click()
+        });
+
+        {#原版#}
+        var postHttpQwquest = function (data) {
+            $('#bodtConten tr').remove();
+            {#$('#num_pages').html('共' + data.num_pages + '页');#}
+            {#获得页的总数 =#}
+            $('#num_pages').html('共' + data.num_pages + '页');
+            if (data.has_previous === true) {
+                $('.first_page button').removeClass('layui-btn-disabled').addClass('layui-btn-primary');
+            } else {
+                $('.first_page button').removeClass('layui-btn-primary').addClass('layui-btn-disabled')
+            }
+
+            if (data.has_next === true) {
+                $('.last_page button').removeClass('layui-btn-disabled').addClass('layui-btn-primary');
+            } else {
+                $('.last_page button').removeClass('layui-btn-primary').addClass('layui-btn-disabled');
+            }
+            {#时间格式化器 #}
+            var format = function (time, format) {
+                var t = new Date(time);
+                var tf = function (i) {
+                    return (i < 10 ?
+                        '0' : '') + i
+                };
+                return format.replace(/yyyy|MM|dd|HH|mm|ss/g,
+                    function (a) {
+                        switch (a) {
+                            case 'yyyy':
+                                return tf(t.getFullYear());
+                                break;
+                            case 'MM':
+                                return tf(t.getMonth() + 1);
+                                break;
+                            case 'mm':
+                                return tf(t.getMinutes());
+                                break;
+                            case 'dd':
+                                return tf(t.getDate());
+                                break;
+                            case 'HH':
+                                return tf(t.getHours());
+                                break;
+                            case 'ss':
+                                return tf(t.getSeconds());
+                                break;
+                        }
+                    });
+            }
+            {#console.log(data)#}
+            {#循环打印blog_li#}
+            $.each(data.blog_li, function (index, value) {
+                let id = index + 1;
+                let create_date = format(value.create_date, 'yyyy-MM-dd HH:mm');
+                var bodtConten = "";
+                bodtConten += '<td>' + id + '</td>';
+                bodtConten += '<td>' + '<img src="' + value.cover + '" style="height: 100px;" alt="">' + '</td>';
+                bodtConten += '<td style="width: 80px;">' + value.title + '</td>';
+                bodtConten += '<td style="width: 500px;">' + value.content + '</td>';
+                bodtConten += '<td>' + value.topic__title + '</td>';
+                bodtConten += '<td>' + value.user__nickname + '</td>';
+                bodtConten += '<td>' + create_date + '</td>';
+                bodtConten += '<td>' +
+                    '<a type="button" onclick="removeRow(' + value.id + ')" class="btn btn-danger">删除</a> ' +
+                    {#'<a type="button" name="delete" href="{% url "blog_del" value.id %}" class="btn btn-danger">删除</a>'+#}
+                    '<a type="button" class="btn btn-success">查看</a>' +
+                    '<a type="button" class="btn btn-primary">修改</a> ' +
+                    '</td>';
+                $('#bodtConten').append('<tr>' + bodtConten + '</tr>');
+            });
+        }
+
+        function page_click() {
+            let page_form = $('#page');
+            $.ajax({
+                type: 'post',
+                url: page_form.attr('action'),
+                dataType: "JSON",
+                data: {page: now_page},
+                success: function (data) {
+                    {#console.log(data)#}
+                    {#清空 #}
+                    {#id = tbody =#}
+                    postHttpQwquest(data)
+                }
+            })
+        }
+    })
+
+    function removeRow(pk) {
+        console.log(pk)
+        var result = confirm("确认删除？");
+        if (result) {
+            $.ajax({
+                url: this.blogDel,
+                type: 'GET',
+                data: {'pk': pk},
+                {#dataType: 'JSON',#}
+                success: function (data) {
+                    console.log(data)
+                    if (data.status) {
+                        $(data).parent().parent().parent().remove();   {#删除#}
+                        window.location.reload();    {#强制刷新,#}
+                     } else {
+                        alert('删除失败');
+                     }
+                }
+            })
+        }
+    }
+
+    function Submit() {
+        $.ajax({
+            url: blogAdd,//url
+            type: "POST",//方法类型
+            dataType: "json",//预期服务器返回的数据类型
+            data: $('#formtest').serialize(),
+            success: function (data) {
+                {#console.log(data);//打印服务端返回的数据(调试用)#}
+                {#if (result.resultCode == 200) {#}
+                {#    alert("SUCCESS");#}
+                {# };#}
+                initialization.postHttpQwquest(data)
+            },
+            error: function (e) {
+                console.log(e)
+                alert("异常！");
+            }
+        })
+    }
+
+
+</script>
+
+

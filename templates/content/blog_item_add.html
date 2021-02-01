@@ -1,0 +1,23 @@
+{% extends  'homepage.html' %}
+
+{% block ContentArea %}
+    <div class="panel panel-default">
+
+
+        <div class="panel-heading">详细页面信息
+{#            <button type="submit" class="btn btn-primary">提交</button>#}
+        </div>
+
+{#        <form class="bs-example bs-example-form" id="formtest" role="form" style="margin: 5px 30px;" method="post">#}
+        <form class="bs-example bs-example-form" id="formtest" action="#" role="form" style="margin: 5px 30px;" method="post">
+            <input type="submit" value="提交" onclick="Submit()">
+        {{ form.as_p  }}
+        </form>
+    </div>
+        <div class="panel panel-default">
+        <div class="panel-heading">轮播图信息</div>
+        <form class="bs-example bs-example-form" role="form" style="margin: 5px 30px;">
+
+        </form>
+    </div>
+{% endblock %}
